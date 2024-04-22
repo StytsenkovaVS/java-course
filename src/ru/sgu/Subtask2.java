@@ -1,59 +1,73 @@
 package ru.sgu;
 
-import java.math.BigInteger;
-import java.math.BigDecimal;
-import java.util.Scanner;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.*;
+import java.util.zip.*;
 
 public class Subtask2 {
-    public static void run() {
-        Scanner in = new Scanner(System.in);
-        System.out.println("\nВведите два числа и операцию (ADD, SUB, MULT, DIV, REM, POW).");
-        String[] inputParams = in.nextLine().split(" ");
-        if (inputParams.length != 3)
-            return;
 
-        BigDecimal bigDecNum1 = new BigDecimal(inputParams[0]);
-        BigDecimal bigDecNum2 = new BigDecimal(inputParams[1]);
-        BigDecimal result = BigDecimal.ZERO;
-        String operation = inputParams[2];
+    private Path dir;
+    private String str;
+    private ZipOutputStream zipOut;
+    private boolean inTargetDir = false;
 
-        switch (operation) {
-            case "ADD":
-                result = bigDecNum1.add(bigDecNum2);
-                break;
-            case "SUB":
-                result = bigDecNum1.subtract(bigDecNum2);
-                break;
-            case "MULT":
-                result = bigDecNum1.multiply(bigDecNum2);
-                break;
-            case "DIV":
-                if (bigDecNum2.compareTo(BigDecimal.ZERO) != 0) {
-                    result = bigDecNum1.divide(bigDecNum2, BigDecimal.ROUND_HALF_UP);
-                } else {
-                    System.out.println("Ошибка: нельзя делить на ноль");
-                    return;
+    public Subtask2(String dirName, String strName) {
+        this.dir = Paths.get(dirName);
+        this.str = strName.toLowerCase();
+    }
+
+    public boolean isCorrectName(Path file) {
+        return file.getFileName().toString().toLowerCase().contains(str);
+    }
+
+    public void run() {
+        try {
+            zipOut = new ZipOutputStream(new FileOutputStream(dir + ".zip"));
+            Files.walkFileTree(dir, new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                    if (isCorrectName(dir) || dir.equals(Subtask2.this.dir)) {
+                        inTargetDir = true;
+                        addDirToZip(dir);
+                    }
+                    return FileVisitResult.CONTINUE;
                 }
-                break;
-            case "REM":
-                result = bigDecNum1.remainder(bigDecNum2);
-                break;
-            case "POW":
-                try {
-                    BigInteger intNum1 = new BigInteger(inputParams[0]);
-                    int intNum2 = Integer.parseInt(inputParams[1]);
-                    result = new BigDecimal(intNum1.pow(intNum2));
-                } catch (NumberFormatException error) {
-                    System.out.println("Ошибка: для выполнения операции POW нужны целые числа.");
-                    return;
+
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    if (inTargetDir || isCorrectName(file)) {
+                        addFileToZip(file);
+                    }
+                    return FileVisitResult.CONTINUE;
                 }
-                break;
-            default:
-                System.out.println("Ошибка: такой операции не существует");
-                return;
+
+                @Override
+                public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                    if (isCorrectName(dir) || dir.equals(Subtask2.this.dir)) {
+                        inTargetDir = false;
+                    }
+                    return FileVisitResult.CONTINUE;
+                }
+
+                private void addFileToZip(Path file) throws IOException {
+                    ZipEntry zipEntry = new ZipEntry(dir.relativize(file).toString());
+                    zipOut.putNextEntry(zipEntry);
+                    Files.copy(file, zipOut);
+                    zipOut.closeEntry();
+                }
+
+                private void addDirToZip(Path dir) throws IOException {
+                    ZipEntry zipEntry = new ZipEntry(Subtask2.this.dir.relativize(dir).toString() + "/");
+                    zipOut.putNextEntry(zipEntry);
+                    zipOut.closeEntry();
+                }
+            });
+            zipOut.close();
+            System.out.println("Архивация прошла успешно");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-        System.out.println(result);
     }
 }
-
