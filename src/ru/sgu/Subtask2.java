@@ -1,9 +1,11 @@
 package ru.sgu;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.*;
+import java.util.ArrayList;
 import java.util.zip.*;
 
 public class Subtask2 {
@@ -52,15 +54,13 @@ public class Subtask2 {
                 }
 
                 private void addFileToZip(Path file) throws IOException {
-                    ZipEntry zipEntry = new ZipEntry(dir.relativize(file).toString());
-                    zipOut.putNextEntry(zipEntry);
+                    zipOut.putNextEntry(new ZipEntry(dir.relativize(file).toString()));
                     Files.copy(file, zipOut);
                     zipOut.closeEntry();
                 }
 
                 private void addDirToZip(Path dir) throws IOException {
-                    ZipEntry zipEntry = new ZipEntry(Subtask2.this.dir.relativize(dir).toString() + "/");
-                    zipOut.putNextEntry(zipEntry);
+                    zipOut.putNextEntry(new ZipEntry(Subtask2.this.dir.relativize(dir).toString() + "/"));
                     zipOut.closeEntry();
                 }
             });
