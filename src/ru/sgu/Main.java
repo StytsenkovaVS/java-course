@@ -9,8 +9,8 @@ public class Main {
 
         while (true) {
             System.out.println("\n1 -- Вывод Hello world." +
-                    "\n2 -- Операции над большими вещественными числами." +
-                    "\n3 -- Ввод/вывод из файла." +
+                    "\n2 -- Вывод Hello world." +
+                    "\n3 -- Вывод Hello world." +
                     "\n4 -- Выход.");
 
             String choice = in.next();
