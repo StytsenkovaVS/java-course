@@ -17,12 +17,8 @@ public class Main {
 
             switch (choice) {
                 case "1":
-                    Subtask1 subtask1 = new Subtask1();
-                    subtask1.run();
                     break;
                 case "2":
-                    Subtask2 subtask2 = new Subtask2();
-                    subtask2.run();
                     break;
                 case "3":
                     Subtask3 subtask3 = new Subtask3();
