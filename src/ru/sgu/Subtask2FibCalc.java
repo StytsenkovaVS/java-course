@@ -24,10 +24,10 @@ public class Subtask2FibCalc extends RecursiveTask<Integer> {
     }
 
     public static void main(String[] args) {
+        System.out.println("Введите N:");
         Scanner in = new Scanner(System.in);
-        String input = in.nextLine();
+        int n = in.nextInt();
         in.close();
-        int n = Integer.parseInt(input);
         ForkJoinPool forkJoinPool = new ForkJoinPool();
         Subtask2FibCalc subtask2FibCalc = new Subtask2FibCalc(n);
         int result = forkJoinPool.invoke(subtask2FibCalc);
