@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Subtask1DaysBetween {
 
-    public static void main(String[] args) {
+    public void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
         List<LocalDate> dates = new ArrayList<>();
