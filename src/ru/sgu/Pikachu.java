@@ -2,9 +2,9 @@ package ru.sgu;
 
 import java.util.Random;
 
-class Pikachu extends BasePokemon implements Battle {
-    public Pikachu(String name, int healthPoints) {
-        super(name, healthPoints);
+class Pikachu extends BasePokemon implements Battle, Cloneable {
+    public Pikachu(String name, int healthPoints, Element element) {
+        super(name, healthPoints, element);
     }
 
     @Override
@@ -17,7 +17,7 @@ class Pikachu extends BasePokemon implements Battle {
     }
 
     @Override
-    public Pikachu clone() {
-        return new Pikachu(this.getName(), this.getHealthPoints());
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

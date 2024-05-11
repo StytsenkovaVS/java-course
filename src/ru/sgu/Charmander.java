@@ -2,9 +2,9 @@ package ru.sgu;
 
 import java.util.Random;
 
-class Charmander extends BasePokemon implements Battle {
-    public Charmander(String name, int healthPoints) {
-        super(name, (int) (healthPoints * 1.3));
+class Charmander extends BasePokemon implements Battle, Cloneable {
+    public Charmander(String name, int healthPoints, Element element) {
+        super(name, (int) (healthPoints * 1.3), element);
     }
 
     @Override
@@ -17,7 +17,7 @@ class Charmander extends BasePokemon implements Battle {
     }
 
     @Override
-    public Charmander clone() {
-        return new Charmander(this.getName(), this.getHealthPoints());
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

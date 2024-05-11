@@ -8,22 +8,31 @@ interface Pokemon {
     int compareTo(Pokemon other);
     boolean equals(Object obj);
     String toString();
-    Object shallowCopy();
-    Object deepCopy();
 }
 
-class BasePokemon implements Pokemon {
+class BasePokemon implements Pokemon, Cloneable {
 
     private String name;
     protected int healthPoints;
+    private Element element;
 
-    public BasePokemon(String name, int healthPoints) {
+
+    public BasePokemon(String name, int healthPoints, Element element) {
         this.name = name;
         this.healthPoints = healthPoints;
+        this.element = element;
     }
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Element getElement() {
+        return element;
     }
 
     public int getHealthPoints() {
@@ -38,6 +47,7 @@ class BasePokemon implements Pokemon {
         return healthPoints > 0;
     }
 
+    @Override
     public int compareTo(Pokemon other) {
         BasePokemon otherBasePokemon = (BasePokemon) other;
         return this.name.compareTo(otherBasePokemon.name);
@@ -64,15 +74,14 @@ class BasePokemon implements Pokemon {
         return name + " (" + healthPoints + " HP)";
     }
 
-    public BasePokemon shallowCopy() {
-        try {
-            return (BasePokemon) super.clone();
-        } catch (CloneNotSupportedException e) {
-            return null;
-        }
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
-    public BasePokemon deepCopy() {
-        return new BasePokemon(this.name, this.healthPoints);
+    public BasePokemon deepClone() throws CloneNotSupportedException {
+        BasePokemon newBasePokemon = (BasePokemon) super.clone();
+        newBasePokemon.element = (Element) element.clone();
+        return newBasePokemon;
     }
 }
