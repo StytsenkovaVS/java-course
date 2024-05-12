@@ -1,27 +1,32 @@
 package ru.sgu;
 
 public class Subtask3LazyInitialization {
+
     public static void main(String[] args) {
-        ExpensiveObject expensiveObject = ExpensiveObject.getInstance();
-        expensiveObject.performExpensiveOperation();
+        // Используем наш класс с отложенной инициализацией
+        DatabaseConnection connection = DatabaseConnection.getInstance();
+        // Теперь можем использовать соединение с базой данных
+        connection.executeQuery("SELECT * FROM users");
     }
 }
 
-class ExpensiveObject {
+class DatabaseConnection {
 
-    private static ExpensiveObject instance;
+    private static DatabaseConnection instance;
 
-    private ExpensiveObject() {
+    private DatabaseConnection() {
+        // Приватный конструктор, чтобы избежать создания объектов извне
     }
 
-    public static ExpensiveObject getInstance() {
+    public static DatabaseConnection getInstance() {
         if (instance == null) {
-            instance = new ExpensiveObject();
+            instance = new DatabaseConnection();
         }
         return instance;
     }
 
-    public void performExpensiveOperation() {
-        System.out.println("Performing expensive operation");
+    public void executeQuery(String query) {
+        // Ваш код для выполнения запроса к базе данных
+        System.out.println("Executing query: " + query);
     }
 }
