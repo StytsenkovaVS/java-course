@@ -36,6 +36,4 @@ class Element implements Cloneable {
         Element element = (Element) obj;
         return name.equals(element.name);
     }
-
-
 }
