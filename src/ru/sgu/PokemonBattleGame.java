@@ -35,15 +35,6 @@ public class PokemonBattleGame {
             System.out.println(charmander.getName() + " победил!");
         }
 
-        if (pikachu.equals(charmander)) {
-            System.out.println("Объекты эквивалентны");
-        } else {
-            System.out.println("Объекты не эквивалентны");
-        }
-
-        System.out.println("hashCode для пикачу: " + pikachu.hashCode());
-        System.out.println("hashCode для чармандера: " + charmander.hashCode());
-
         System.out.println("Результат compareTo: " + pikachu.compareTo(charmander));
 
         System.out.println("toString: " + pikachu.toString());
@@ -54,12 +45,31 @@ public class PokemonBattleGame {
         copiedEl.setName("Вода");
         System.out.println(copiedEl.getName());
         System.out.println(el.getName());
+
         System.out.println();
+
         BasePokemon deepCopyOfCharmander = (BasePokemon) charmander.deepClone();
         Element deepCopiedEl = deepCopyOfCharmander.getElement();
         System.out.println(deepCopiedEl.getName());
         deepCopiedEl.setName("Вода");
         System.out.println(deepCopiedEl.getName());
         System.out.println(fire.getName());
+
+        if (pikachu.equals(shallowCopyOfPikachu)) {
+            System.out.println("Объекты эквивалентны");
+        } else {
+            System.out.println("Объекты не эквивалентны");
+        }
+
+        if (charmander.equals(deepCopyOfCharmander)) {
+            System.out.println("Объекты эквивалентны");
+        } else {
+            System.out.println("Объекты не эквивалентны");
+        }
+
+        System.out.println("hashCode для пикачу: " + pikachu.hashCode());
+        System.out.println("hashCode для чармандера: " + charmander.hashCode());
+        System.out.println("hashCode для поверхностной копии пикачу: " + shallowCopyOfPikachu.hashCode());
+        System.out.println("hashCode для глубокой копии чармандера: " + deepCopyOfCharmander.hashCode());
     }
 }

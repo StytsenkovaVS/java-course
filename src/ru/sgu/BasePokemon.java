@@ -1,15 +1,5 @@
 package ru.sgu;
 
-interface Battle {
-    void attack(BasePokemon enemy);
-}
-
-interface Pokemon {
-    int compareTo(Pokemon other);
-    boolean equals(Object obj);
-    String toString();
-}
-
 class BasePokemon implements Pokemon, Cloneable {
 
     private String name;
@@ -59,19 +49,20 @@ class BasePokemon implements Pokemon, Cloneable {
         if (obj == null || getClass() != obj.getClass()) return false;
         BasePokemon basePokemon = (BasePokemon) obj;
         return healthPoints == basePokemon.healthPoints &&
-                name.equals(basePokemon.name);
+                name.equals(basePokemon.name) && element.equals(basePokemon.element);
     }
 
     @Override
     public int hashCode() {
         int result = name.hashCode();
         result = 31 * result + healthPoints;
+        result = 31 * result + element.hashCode();
         return result;
     }
 
     @Override
     public String toString() {
-        return name + " (" + healthPoints + " HP)";
+        return name + " (" + healthPoints + " HP), element = " + element;
     }
 
     @Override
