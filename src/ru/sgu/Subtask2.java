@@ -1,11 +1,9 @@
 package ru.sgu;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.*;
-import java.util.ArrayList;
 import java.util.zip.*;
 
 public class Subtask2 {
@@ -32,7 +30,8 @@ public class Subtask2 {
                 public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
                     if (isCorrectName(dir) || dir.equals(Subtask2.this.dir)) {
                         inTargetDir = true;
-                        addDirToZip(dir);
+                        zipOut.putNextEntry(new ZipEntry(Subtask2.this.dir.relativize(dir) + "/"));
+                        zipOut.closeEntry();
                     }
                     return FileVisitResult.CONTINUE;
                 }
@@ -40,7 +39,9 @@ public class Subtask2 {
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                     if (inTargetDir || isCorrectName(file)) {
-                        addFileToZip(file);
+                        zipOut.putNextEntry(new ZipEntry(dir.relativize(file).toString()));
+                        Files.copy(file, zipOut);
+                        zipOut.closeEntry();
                     }
                     return FileVisitResult.CONTINUE;
                 }
@@ -51,17 +52,6 @@ public class Subtask2 {
                         inTargetDir = false;
                     }
                     return FileVisitResult.CONTINUE;
-                }
-
-                private void addFileToZip(Path file) throws IOException {
-                    zipOut.putNextEntry(new ZipEntry(dir.relativize(file).toString()));
-                    Files.copy(file, zipOut);
-                    zipOut.closeEntry();
-                }
-
-                private void addDirToZip(Path dir) throws IOException {
-                    zipOut.putNextEntry(new ZipEntry(Subtask2.this.dir.relativize(dir).toString() + "/"));
-                    zipOut.closeEntry();
                 }
             });
             zipOut.close();
