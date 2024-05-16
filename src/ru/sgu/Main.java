@@ -1,11 +1,10 @@
 package ru.sgu;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
 
         Scanner in = new Scanner(System.in);
 
@@ -28,10 +27,10 @@ public class Main {
                     break;
                 case "2":
                     System.out.println("Введите название директории и имя целевой строки:");
-                    String path = in.next();
-                    String str = in.next();
-                    Subtask2 subtask2 = new Subtask2(path, str);
-                    subtask2.run();
+                    String sourceFolderPath = in.next();
+                    String keyword = in.next();
+                    Subtask2 subtask2 = new Subtask2(sourceFolderPath, keyword);
+                    subtask2.zipFolder();
                     break;
                 case "3":
                     return;
