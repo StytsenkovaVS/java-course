@@ -2,14 +2,40 @@ package ru.sgu;
 
 import java.sql.*;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 public class Subtask3LazyInitialization {
 
-    private static Connection connection;
-    private static String url = "jdbc:postgresql://localhost:5432/java-task7";
-    private static String user = "postgres";
-    private static String password = "123";
+    private Connection connection;
+    private String url = "jdbc:postgresql://localhost:5432/java-task7";
+    private String user = "postgres";
+    private String password = "123";
 
-    public static Connection getInstanceOfConnection() {
+    public static void main(String[] args) {
+        Subtask3LazyInitialization subtask3LazyInitialization = new Subtask3LazyInitialization();
+
+        try {
+            Connection connection = subtask3LazyInitialization.getInstanceOfConnection();
+
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT employeeName FROM employeesAge WHERE age > 20");
+
+            while (resultSet.next()) {
+                System.out.println(resultSet.getString("employeeName"));
+            }
+
+            subtask3LazyInitialization.getInstanceOfCloseConnection();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Connection getInstanceOfConnection() {
         if (connection == null) {
             try {
                 connection = DriverManager.getConnection(url, user, password);
@@ -20,7 +46,7 @@ public class Subtask3LazyInitialization {
         return connection;
     }
 
-    public static void getInstanceOfCloseConnection() {
+    private void getInstanceOfCloseConnection() {
         if (connection != null) {
             try {
                 connection.close();
@@ -28,23 +54,6 @@ public class Subtask3LazyInitialization {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        }
-    }
-
-    public static void main(String[] args) {
-        try {
-            Connection connection = Subtask3LazyInitialization.getInstanceOfConnection();
-
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT employeeName FROM employeesAge WHERE age > 20");
-
-            while (resultSet.next()) {
-                System.out.println(resultSet.getString("employeeName"));
-            }
-
-            Subtask3LazyInitialization.getInstanceOfCloseConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 }
