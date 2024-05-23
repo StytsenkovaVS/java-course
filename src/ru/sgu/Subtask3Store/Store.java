@@ -1,31 +1,44 @@
 package ru.sgu.Subtask3Store;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 class Store {
-    private List<Product> products;
+    private Product[] products;
+    private int currentIndex;
+    private Lock lock;
 
     public Store() {
-        products = new ArrayList<>();
+        products = new Product[10];
+        currentIndex = 0;
+        lock = new ReentrantLock();
     }
 
     public void addProduct(Product product) {
-        products.add(product);
-    }
-
-    public Product sellProduct() {
-        if (products.size() > 0) {
-            Random rand = new Random();
-            int index = rand.nextInt(products.size());
-            return products.remove(index);
-        } else {
-            return null;
+        lock.lock();
+        try {
+            if (currentIndex < products.length) {
+                products[currentIndex] = product;
+                currentIndex++;
+            }
+        } finally {
+            lock.unlock();
         }
     }
 
-    public List<Product> getProducts() {
-        return products;
+    public Product sellProduct() {
+        lock.lock();
+        try {
+            if (currentIndex > 0) {
+                currentIndex--;
+                Product product = products[currentIndex];
+                products[currentIndex] = null;
+                return product;
+            } else {
+                return null;
+            }
+        } finally {
+            lock.unlock();
+        }
     }
 }

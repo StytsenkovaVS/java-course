@@ -1,5 +1,7 @@
 package ru.sgu.Subtask3Store;
 
+import java.util.Random;
+
 public class Main {
     public static void main(String[] args) {
         String[] values = {
@@ -22,15 +24,22 @@ public class Main {
             store.addProduct(new Product(name, price));
         }
 
-        int n = 3;
-        for (int i = 0; i < n; i++) {
-            Customer customer = new Customer("Покупатель" + (i + 1), store);
-            customer.start();
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        new Thread(() -> {
+            Random random = new Random();
+            while (true) {
+                try {
+                    Thread.sleep(1000);
+                    store.addProduct(new Product("Продукт" + random.nextInt(100),
+                            random.nextInt(500)));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
+        }).start();
+
+        int N = 3;
+        for (int i = 1; i <= N; i++) {
+            new Customer(store, "Покупатель" + i).start();
         }
     }
 }
