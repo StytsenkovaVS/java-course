@@ -14,18 +14,12 @@ class Customer extends Thread {
 
     @Override
     public void run() {
-        while (true) {
-            try {
-                Product product = store.sellProduct();
-                if (product != null) {
-                    totalPrice += product.getPrice();
-                    System.out.println(name + " " + product.getName() + " " + product.getPrice() + "\n" + totalPrice);
-                } else {
-                    break;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        Product product = store.sellProduct();
+        if (product != null) {
+            totalPrice += product.getPrice();
+            System.out.println(name + " " + product.getName() + " " + product.getPrice() + "\n" + totalPrice);
+        } else {
+            System.out.println(name + " не нашёл товар.");
         }
     }
 }
