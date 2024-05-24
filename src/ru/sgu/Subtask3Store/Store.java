@@ -20,5 +20,4 @@ class Store {
         }
         return null;
     }
-
 }
