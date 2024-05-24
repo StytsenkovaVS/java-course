@@ -10,7 +10,7 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         Store store = new Store();
 
-        int N = 3;
+        int Ncustomers = 3;
         int customerDelayM = 3;
         int productDelayL = 1;
 
@@ -20,9 +20,9 @@ public class Main {
             store.addProduct(new Product("Продукт" + random.nextInt(100), random.nextInt(500)));
         }, 0, productDelayL, TimeUnit.SECONDS);
 
-        ScheduledExecutorService customerExecutor = Executors.newScheduledThreadPool(N);
+        ScheduledExecutorService customerExecutor = Executors.newScheduledThreadPool(Ncustomers);
 
-        for (int i = 1; i <= N; i++) {
+        for (int i = 1; i <= Ncustomers; i++) {
             Customer customer = new Customer(store, "Покупатель" + i);
             customerExecutor.scheduleAtFixedRate(customer, customerDelayM, customerDelayM, TimeUnit.SECONDS);
         }
